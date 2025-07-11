@@ -145,7 +145,7 @@
         // 4) National Debt (Treasury)
         detEl.textContent='Fetching Treasury debt…';
         json = await fetchSeries('https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/total_public_debt/2010-01-01');
-        economicData.debt = json.data.map(o=>({ date:o.record_date, value:+(o.total_public_debt_outstanding__mil as unknown) / 1000 }));
+        economicData.debt = json.data.map(o=>({ date: o.record_date, value: parseFloat(o.total_public_debt_outstanding__mil) / 1000 }));
 
         // Render metrics
         detEl.textContent='Rendering metrics…';
