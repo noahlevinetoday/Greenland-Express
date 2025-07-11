@@ -138,11 +138,13 @@
         // 3) GDP (BEA)
         detEl.textContent='Fetching BEA GDP…';
         json = await fetchSeries(`https://apps.bea.gov/api/data?&UserID=${BEA_API_KEY}&method=GetData&DataSetName=GDPbyQuarter&Frequency=Q&Year=2025,2024`);
-        economicData.gdp = json.BEAAPI.Results.Data
+        // handle possible response shapes
+        const beaData = (json.BEAAPI?.Results?.Data) || (json.Results?.Data) || [];
+        economicData.gdp = beaData
           .filter(o=>o.LineCode==='1')
-          .map(o=>({ quarter:o.TimePeriod, value:+o.DataValue }));
+          .map(o=>({ quarter: o.TimePeriod, value: +o.DataValue }));
 
-        // 4) National Debt (Treasury)
+        // 4) National Debt (Treasury) (Treasury)
         detEl.textContent='Fetching Treasury debt…';
         json = await fetchSeries('https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/total_public_debt/2010-01-01');
         economicData.debt = json.data.map(o=>({ date: o.record_date, value: parseFloat(o.total_public_debt_outstanding__mil) / 1000 }));
