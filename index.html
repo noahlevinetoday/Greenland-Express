@@ -172,8 +172,35 @@
         .forEach(([k,unit])=>{
           document.getElementById(k+'Chart').style.display='block';
           const ctx = document.getElementById(k+'Canvas').getContext('2d');
-          if(charts[k]) charts[k].destroy();
-          charts[k]=new Chart(ctx,{type:'line',data:{labels:economicData[k].map(d=>d.date),datasets:[{label:k,data:economicData[k].map(d=>d.value),tension:0.3,borderColor:'#4ecdc4',pointRadius:6,pointHoverRadius:10,hitRadius:15,pointBackgroundColor:'#4ecdc4'}]},options:{responsive:true,scales:{x:{type:'time',time:{unit:unit}},y:{beginAtZero:false}}}});
+          if (charts[k]) charts[k].destroy();
+
+          // Use category axis for GDP quarters; time axis otherwise
+          const labels = economicData[k].map(d => k === 'gdp' ? d.quarter : d.date);
+          const xScale = k === 'gdp'
+            ? { type: 'category' }
+            : { type: 'time', time: { unit: unit } };
+
+          charts[k] = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels,
+              datasets: [{
+                label: k,
+                data: economicData[k].map(d => d.value),
+                tension: 0.3,
+                borderColor: '#4ecdc4',
+                pointRadius: 6,
+                pointHoverRadius: 10,
+                hitRadius: 15,
+                pointBackgroundColor: '#4ecdc4'
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: { x: xScale, y: { beginAtZero: false } }
+            }
+          });
+        });
         });
 
       } catch(e) {
