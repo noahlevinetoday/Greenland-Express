@@ -3,211 +3,400 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>US Economic Dashboard – Trump Presidency (2025‑present)</title>
+  <title>US Economic Dashboard – Trump Presidency (2025-present)</title>
 
   <!-- Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.1/chartjs-adapter-moment.min.js"></script>
 
-  <!-- Styles (same as before) -->
+  <!-- Styles -->
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: #0a0a0a; color: #fff; line-height: 1.6; overflow-x: hidden;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      line-height: 1.6;
+      overflow-x: hidden;
     }
-    .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 2rem 0; text-align: center;
-      position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    .header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      padding: 2rem 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
-    .header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 50px 50px;
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
       animation: drift 20s linear infinite;
     }
-    @keyframes drift { 0% { transform: translate(0, 0); } 100% { transform: translate(50px, 50px); } }
-    h1 { font-size: 2.5rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff 0%, #ff6b6b 50%, #4ecdc4 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    @keyframes drift {
+      0% { transform: translate(0,0); }
+      100% { transform: translate(50px,50px); }
     }
-    .subtitle { font-size: 1.2rem; color: #a8a8a8; }
-    .inauguration-date { display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; border-radius: 20px;
-      background: rgba(255,107,107,0.2); border: 1px solid rgba(255,107,107,0.5);
-    }
-    .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 2rem; margin-bottom: 3rem; }
-    .metric-card { background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%); border-radius: 20px; padding: 2rem;
-      position: relative; overflow: hidden; transition: transform 0.3s; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .metric-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
-    .metric-title { font-size: 1.3rem; margin-bottom: 0.5rem; color: #4ecdc4; }
-    .metric-value { font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem;
-      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%); -webkit-background-clip: text;
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #fff 0%, #ff6b6b 50%, #4ecdc4 100%);
+      -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    .subtitle { font-size: 1.2rem; color: #a8a8a8; }
+    .inauguration-date {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      background: rgba(255,107,107,0.2);
+      border: 1px solid rgba(255,107,107,0.5);
+    }
+    .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .metric-card {
+      background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .metric-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .metric-title { font-size: 1.3rem; margin-bottom: 0.5rem; color: #4ecdc4; }
+    .metric-value {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .metric-value .positive { 
+        background: linear-gradient(135deg, #4ecdc4 0%, #a8e063 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .metric-value .negative { 
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
     .metric-change { font-size: 1.1rem; color: #a8a8a8; }
-    .metric-change.positive { color: #4ecdc4; }
-    .metric-change.negative { color: #ff6b6b; }
-    .chart-container { background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%); border-radius: 20px; padding: 2rem;
-      margin-bottom: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 2rem;
     }
-    .chart-title { font-size: 1.5rem; margin-bottom: 1rem; text-align: center; color: #4ecdc4; }
-    canvas { max-height: 400px; }
-    .loading { text-align: center; padding: 2rem; font-size: 1.2rem; color: #4ecdc4; }
-    .pulse { animation: pulse 2s infinite; }
-    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-    .error { display: none; background: rgba(255,107,107,0.2); border: 1px solid #ff6b6b;
-      border-radius: 10px; padding: 1rem; margin: 1rem 0; color: #ff6b6b;
+    .chart-container {
+      background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
     }
-    .refresh-btn { display: block; margin: 2rem auto; padding: 0.8rem 2rem; border: none; border-radius: 30px;
-      font-size: 1rem; cursor: pointer; background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%); color: #fff;
-      transition: transform 0.3s; box-shadow: 0 4px 15px rgba(78,205,196,0.3);
-    }
-    .refresh-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(78,205,196,0.5); }
+    footer { text-align: center; padding: 2rem; color: #555; }
   </style>
 </head>
 <body>
+
   <header class="header">
-    <h1>US Economic Dashboard</h1>
-    <p class="subtitle">Tracking America’s Economic Performance</p>
-    <div class="inauguration-date"><strong>Trump Presidency:</strong> January 20, 2025 – Present</div>
+    <h1>U.S. Economic Dashboard</h1>
+    <p class="subtitle">Trump Presidency (January 20, 2025 – Present)</p>
+    <div class="inauguration-date">Inauguration: Jan 20, 2025</div>
   </header>
 
-  <div class="container">
-    <div id="loading" class="loading pulse">
-      Loading data…<div id="loadingDetails" style="margin-top:0.5rem;font-size:0.9rem;"></div>
-    </div>
-    <div id="error" class="error"></div>
+  <main class="container">
+    <!-- Metric Cards -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <h2 class="metric-title">GDP Growth Rate</h2>
+        <p class="metric-value" id="gdp-value">Loading...</p>
+        <p class="metric-change" id="gdp-change"></p>
+      </div>
+      <div class="metric-card">
+        <h2 class="metric-title">Unemployment Rate</h2>
+        <p class="metric-value" id="unemployment-value">Loading...</p>
+        <p class="metric-change" id="unemployment-change"></p>
+      </div>
+      <div class="metric-card">
+        <h2 class="metric-title">Inflation Rate (CPI)</h2>
+        <p class="metric-value" id="inflation-value">Loading...</p>
+        <p class="metric-change" id="inflation-change"></p>
+      </div>
+      <div class="metric-card">
+        <h2 class="metric-title">S&P 500</h2>
+        <p class="metric-value" id="sp500-value">Loading...</p>
+        <p class="metric-change" id="sp500-change"></p>
+      </div>
+    </section>
 
-    <div id="metricsGrid" class="metrics-grid" style="display:none;"></div>
-    <div id="unemploymentChart" class="chart-container" style="display:none;"><h2 class="chart-title">Unemployment Rate Trend</h2><canvas id="unemploymentCanvas"></canvas></div>
-    <div id="inflationChart" class="chart-container" style="display:none;"><h2 class="chart-title">Inflation (CPI) Trend</h2><canvas id="inflationCanvas"></canvas></div>
-    <div id="gdpChart" class="chart-container" style="display:none;"><h2 class="chart-title">GDP Growth Rate</h2><canvas id="gdpCanvas"></canvas></div>
-    <div id="debtChart" class="chart-container" style="display:none;"><h2 class="chart-title">National Debt Trend</h2><canvas id="debtCanvas"></canvas></div>
+    <!-- Charts -->
+    <section class="charts-grid">
+      <div class="chart-container">
+        <canvas id="gdpChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="unemploymentChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="inflationChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="sp500Chart"></canvas>
+      </div>
+    </section>
+  </main>
 
-    <button class="refresh-btn" onclick="loadAllData()">Refresh Data</button>
-  </div>
+  <footer id="footer">
+    <p>Last Updated: <span id="last-updated"></span></p>
+    <p>&copy; 2025 Economic Dashboard. Data from FRED, Federal Reserve Bank of St. Louis.</p>
+  </footer>
 
   <script>
-    /* CONFIGURATION */
-    const BLS_API_KEY = 'cb6c36b4262c4a7ea7dad48f6e4607a9';
-    const BEA_API_KEY = '22ACDD6B-AACF-4FC9-9D3C-7FD8177EF3E9';
-    const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
-    const INAUG_MONTH = '2025-01';
-    Chart.defaults.color = '#fff'; Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      let economicData = { gdp: [], gdpForChart: [], unemployment: [], inflation: [], sp500: [] };
+      let charts = {};
 
-    /* STATE */
-    const economicData = {};
-    const charts = {};
+      // --- FETCH REAL ECONOMIC DATA ---
+      const fetchData = async () => {
+        // FRED API Key
+        const apiKey = 'd2c9f37eac3cdd75dd4147ef7726e8ff'; 
 
-    /* HELPERS */
-    function formatNum(n, d=1) { return n.toLocaleString(undefined, { minimumFractionDigits:d, maximumFractionDigits:d }); }
-    function calcChange(arr) {
-      if (!arr?.length) return { curr:'–', change:'n/a', cls:'' };
-      const curr = arr.slice(-1)[0].value;
-      const baseObj = arr.find(o => o.date?.startsWith(INAUG_MONTH));
-      const base = baseObj?.value ?? curr;
-      const delta = curr - base;
-      const sign = delta>0?'+':'';
-      return { curr, change:`${sign}${formatNum(delta)}${arr[0].date?.includes('-')?'%':''}`, cls: delta>0?'positive':'negative' };
-    }
+        document.getElementById('last-updated').textContent = 'Fetching data...';
+        
+        const proxyUrl = 'https://corsproxy.io/?';
+        const baseUrl = 'https://api.stlouisfed.org/fred/series/observations';
+        const startDate = '2024-01-01'; 
 
-    async function fetchSeries(apiUrl) {
-      const res = await fetch(CORS_PROXY + encodeURIComponent(apiUrl));
-      if (!res.ok) throw new Error(res.statusText);
-      return res.json();
-    }
+        const series = {
+            gdp: 'A191RL1Q225SBEA', // Real GDP, Percent Change from Preceding Period, Quarterly
+            unemployment: 'UNRATE', // Civilian Unemployment Rate, Monthly
+            cpi: 'CPIAUCSL', // Consumer Price Index, Monthly
+            sp500: 'SP500' // S&P 500, Daily
+        };
 
-    async function loadAllData() {
-      const loadEl = document.getElementById('loading');
-      const detEl = document.getElementById('loadingDetails');
-      const errEl = document.getElementById('error');
-      const grid  = document.getElementById('metricsGrid');
-      try {
-        loadEl.style.display='block'; errEl.style.display='none'; grid.innerHTML='';
-        detEl.textContent='Fetching BLS data…';
-
-        // 1) Unemployment (BLS)
-        let json = await fetchSeries(`https://api.bls.gov/publicAPI/v2/timeseries/data/LNS14000000?registrationKey=${BLS_API_KEY}`);
-        economicData.unemployment = json.Results.series[0].data
-          .map(d=>({ date:d.year+'-'+d.periodName, value: +d.value })).reverse();
-
-        // 2) Inflation CPI (BLS)
-        json = await fetchSeries(`https://api.bls.gov/publicAPI/v2/timeseries/data/CUSR0000SA0?registrationKey=${BLS_API_KEY}`);
-        economicData.inflation = json.Results.series[0].data
-          .map(d=>({ date:d.year+'-'+d.periodName, value:+d.value })).reverse();
-
-        // 3) GDP (BEA)
-        detEl.textContent='Fetching BEA GDP…';
-        json = await fetchSeries(`https://apps.bea.gov/api/data?&UserID=${BEA_API_KEY}&method=GetData&DataSetName=GDPbyQuarter&Frequency=Q&Year=2025,2024`);
-        // handle possible response shapes
-        const beaData = (json.BEAAPI?.Results?.Data) || (json.Results?.Data) || [];
-        economicData.gdp = beaData
-          .filter(o=>o.LineCode==='1')
-          .map(o=>({ quarter: o.TimePeriod, value: +o.DataValue }));
-
-        // 4) National Debt (Treasury) (Treasury)
-        detEl.textContent='Fetching Treasury debt…';
-        json = await fetchSeries('https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/total_public_debt/2010-01-01');
-        economicData.debt = json.data.map(o=>({ date: o.record_date, value: parseFloat(o.total_public_debt_outstanding__mil) / 1000 }));
-
-        // Render metrics
-        detEl.textContent='Rendering metrics…';
-        const list = [
-          ['unemployment','💼 Unemployment','%'],
-          ['inflation','📈 Inflation (CPI)','%'],
-          ['gdp','📊 GDP Growth','%'],
-          ['debt','💸 National Debt','T']
-        ];
-        list.forEach(([key,title,unit])=>{
-          const { curr, change, cls } = calcChange(economicData[key]);
-          const card = document.createElement('div'); card.className='metric-card';
-          card.innerHTML = `<h3 class="metric-title">${title}</h3>`+
-                           `<div class="metric-value">${formatNum(curr)}${unit}</div>`+
-                           `<div class="metric-change ${cls}">${change} since Jan 2025</div>`;
-          grid.appendChild(card);
+        const fetchPromises = Object.keys(series).map(key => {
+            const seriesId = series[key];
+            const fredUrl = `${baseUrl}?series_id=${seriesId}&api_key=${apiKey}&file_type=json&observation_start=${startDate}`;
+            const url = proxyUrl + encodeURIComponent(fredUrl);
+            return fetch(url).then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch ${seriesId}: ${response.statusText}`);
+                }
+                return response.json();
+            });
         });
-        grid.style.display='grid'; loadEl.style.display='none';
 
-        // Draw charts
-        [['unemployment','month'],['inflation','month'],['gdp','quarter'],['debt','month']]
-        .forEach(([k,unit])=>{
-          document.getElementById(k+'Chart').style.display='block';
-          const ctx = document.getElementById(k+'Canvas').getContext('2d');
-          if (charts[k]) charts[k].destroy();
+        try {
+            const [gdpRes, unemploymentRes, cpiRes, sp500Res] = await Promise.all(fetchPromises);
+            
+            const termStartDate = '2025-01-20';
+            
+            const allGdpData = gdpRes.observations.map(d => ({ date: d.date, value: parseFloat(d.value) }));
+            economicData.gdpForChart = allGdpData.filter(d => moment(d.date).isSameOrAfter('2024-10-01'));
+            economicData.gdp = allGdpData.filter(d => moment(d.date).isSameOrAfter(termStartDate));
 
-          // Use category axis for GDP quarters; time axis otherwise
-          const labels = economicData[k].map(d => k === 'gdp' ? d.quarter : d.date);
-          const xScale = k === 'gdp'
-            ? { type: 'category' }
-            : { type: 'time', time: { unit: unit } };
+            economicData.unemployment = unemploymentRes.observations
+                .map(d => ({ date: d.date, value: parseFloat(d.value) }))
+                .filter(d => moment(d.date).isSameOrAfter(termStartDate));
+            
+            const cpiData = cpiRes.observations.map(d => ({ date: d.date, value: parseFloat(d.value) }));
+            economicData.inflation = cpiData.slice(12).map((d, i) => {
+                const prevYearValue = cpiData[i].value;
+                const inflationValue = ((d.value - prevYearValue) / prevYearValue) * 100;
+                return { date: d.date, value: inflationValue };
+            }).filter(d => moment(d.date).isSameOrAfter(termStartDate));
 
-          charts[k] = new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels,
-              datasets: [{
-                label: k,
-                data: economicData[k].map(d => d.value),
-                tension: 0.3,
-                borderColor: '#4ecdc4',
-                pointRadius: 6,
-                pointHoverRadius: 10,
-                hitRadius: 15,
-                pointBackgroundColor: '#4ecdc4'
-              }]
-            },
-            options: {
-              responsive: true,
-              scales: { x: xScale, y: { beginAtZero: false } }
+            const sp500Monthly = {};
+            sp500Res.observations.forEach(d => {
+                if (d.value !== '.') {
+                    const month = d.date.substring(0, 7);
+                    sp500Monthly[month] = { date: d.date, value: parseFloat(d.value) };
+                }
+            });
+            economicData.sp500 = Object.values(sp500Monthly)
+                .filter(d => moment(d.date).isSameOrAfter(termStartDate));
+
+            updateMetricCards();
+            createCharts();
+
+        } catch (error) {
+            console.error("Failed to fetch economic data:", error);
+            document.getElementById('gdp-value').textContent = 'Error';
+            document.getElementById('unemployment-value').textContent = 'Error';
+            document.getElementById('inflation-value').textContent = 'Error';
+            document.getElementById('sp500-value').textContent = 'Error';
+        }
+      };
+      
+      // --- UPDATE METRIC CARDS ---
+      const updateMetricCards = () => {
+        // Standard display function for most cards
+        const displayValue = (elementId, dataArray, isPercent, higherIsBetter) => {
+            const changeValueEl = document.getElementById(`${elementId}-value`);
+            const absoluteValueEl = document.getElementById(`${elementId}-change`);
+
+            if (!dataArray || dataArray.length === 0) {
+                changeValueEl.textContent = 'Pending';
+                absoluteValueEl.innerHTML = 'Waiting for 2025 data...';
+                return;
             }
-          });
-        });
-        });
 
-      } catch(e) {
-        loadEl.style.display='none'; errEl.style.display='block'; errEl.textContent=`Error: ${e.message}`;
-      }
-    }
-    window.addEventListener('load',loadAllData);
+            const start = dataArray[0].value;
+            const current = dataArray[dataArray.length - 1].value;
+            
+            const change = current - start;
+            const pctChange = (start !== 0) ? (change / Math.abs(start)) * 100 : 0;
+            let symbol = pctChange >= 0 ? '▲' : '▼';
+            let cssClass = higherIsBetter ? (pctChange >= 0 ? 'positive' : 'negative') : (pctChange < 0 ? 'positive' : 'negative');
+
+            changeValueEl.innerHTML = `<span class="${cssClass}">${symbol} ${pctChange.toFixed(2)}%</span>`;
+            
+            const currentFormatted = isPercent ? `${current.toFixed(1)}%` : current.toLocaleString(undefined, {maximumFractionDigits: 0});
+            absoluteValueEl.textContent = `Since Trump took office. Current: ${currentFormatted}`;
+        };
+
+        // Special handling for GDP card
+        const displayGdpValue = () => {
+            const changeValueEl = document.getElementById('gdp-value');
+            const absoluteValueEl = document.getElementById('gdp-change');
+            const dataForChart = economicData.gdpForChart;
+            const dataForCalc = economicData.gdp;
+
+            // Set the absolute value text first
+            if (dataForChart && dataForChart.length > 0) {
+                const current = dataForChart[dataForChart.length - 1].value;
+                absoluteValueEl.textContent = `Most Recent: ${current.toFixed(1)}%`;
+            } else {
+                absoluteValueEl.textContent = 'No Data';
+            }
+
+            // Set the change value text
+            if (dataForCalc && dataForCalc.length > 0) {
+                const start = dataForCalc[0].value;
+                const current = dataForCalc[dataForCalc.length - 1].value;
+                const change = current - start;
+                const pctChange = (start !== 0) ? (change / Math.abs(start)) * 100 : 0;
+                let symbol = pctChange >= 0 ? '▲' : '▼';
+                let cssClass = pctChange >= 0 ? 'positive' : 'negative';
+                
+                changeValueEl.innerHTML = `<span class="${cssClass}">${symbol} ${pctChange.toFixed(2)}%</span>`;
+                absoluteValueEl.textContent = `Since Trump took office. Current: ${current.toFixed(1)}%`;
+            } else {
+                changeValueEl.textContent = 'Pending';
+                // The absolute text is already set to "Most Recent", which is correct in this case.
+            }
+        };
+
+        displayGdpValue();
+        displayValue('unemployment', economicData.unemployment, true, false);
+        displayValue('inflation', economicData.inflation, true, false);
+        displayValue('sp500', economicData.sp500, false, true);
+
+        document.getElementById('last-updated').textContent = new Date().toLocaleString();
+      };
+
+      // --- CREATE CHARTS ---
+      const createCharts = () => {
+        const chartOptions = (title, color) => ({
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { intersect: false, mode: 'index' },
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: title, color: '#fff', font: { size: 18 } },
+            tooltip: {
+              enabled: true,
+              backgroundColor: 'rgba(10, 10, 10, 0.85)',
+              titleFont: { size: 16, weight: 'bold' },
+              titleColor: '#ffffff',
+              bodyFont: { size: 14 },
+              bodyColor: '#dddddd',
+              padding: 12,
+              cornerRadius: 8,
+              borderColor: color,
+              borderWidth: 1,
+              displayColors: false,
+              caretSize: 8,
+              callbacks: {
+                title: function(tooltipItems) { return moment(tooltipItems[0].parsed.x).format('MMMM YYYY'); },
+                label: function(context) {
+                    let label = context.dataset.label || '';
+                    if (label) { label += ': '; }
+                    if (context.parsed.y !== null) {
+                        if (context.dataset.label === 'S&P 500') {
+                             label += context.parsed.y.toLocaleString(undefined, {maximumFractionDigits: 0});
+                        } else {
+                             label += context.parsed.y.toFixed(2) + '%';
+                        }
+                    }
+                    return " " + label;
+                }
+              }
+            }
+          },
+          scales: {
+            x: { type: 'time', time: { unit: 'month' }, ticks: { color: '#a8a8a8' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+            y: { ticks: { color: '#a8a8a8' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+          },
+          animation: { duration: 800, easing: 'easeInOutQuart' }
+        });
+        
+        const chartDataSet = (data, label, color) => [{
+            label: label,
+            data: data,
+            borderColor: color,
+            backgroundColor: `${color}33`,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 4,
+            pointHoverRadius: 7,
+            pointBackgroundColor: color,
+            pointHoverBackgroundColor: '#fff',
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 2,
+        }];
+
+        const createOrUpdateChart = (chartId, data, label, color, title) => {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            if (charts[chartId]) {
+                charts[chartId].data.datasets[0].data = data;
+                charts[chartId].update();
+            } else {
+                charts[chartId] = new Chart(ctx, {
+                    type: 'line',
+                    data: { datasets: chartDataSet(data, label, color) },
+                    options: chartOptions(title, color)
+                });
+            }
+        };
+        
+        createOrUpdateChart('gdpChart', economicData.gdpForChart.map(d => ({x: d.date, y: d.value})), 'GDP Growth', '#4ecdc4', 'GDP Growth Rate (%)');
+        createOrUpdateChart('unemploymentChart', economicData.unemployment.map(d => ({x: d.date, y: d.value})), 'Unemployment Rate', '#ff6b6b', 'Unemployment Rate (%)');
+        createOrUpdateChart('inflationChart', economicData.inflation.map(d => ({x: d.date, y: d.value})), 'Inflation Rate', '#ffc107', 'Inflation Rate (CPI %)');
+        createOrUpdateChart('sp500Chart', economicData.sp500.map(d => ({x: d.date, y: d.value})), 'S&P 500', '#007bff', 'S&P 500 Index');
+      };
+
+      // --- INITIALIZE DASHBOARD ---
+      fetchData();
+    });
   </script>
+
 </body>
 </html>
