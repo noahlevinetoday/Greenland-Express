@@ -3,400 +3,193 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>US Economic Dashboard – Trump Presidency (2025-present)</title>
+  <title>US Economic Dashboard – 2026 Edition</title>
 
-  <!-- Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.1/chartjs-adapter-moment.min.js"></script>
 
-  <!-- Styles -->
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #0a0a0a;
       color: #fff;
       line-height: 1.6;
-      overflow-x: hidden;
     }
     .header {
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      padding: 2rem 0;
+      padding: 2.5rem 0;
       text-align: center;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 50px 50px;
-      animation: drift 20s linear infinite;
-    }
-    @keyframes drift {
-      0% { transform: translate(0,0); }
-      100% { transform: translate(50px,50px); }
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      background: linear-gradient(135deg, #fff 0%, #ff6b6b 50%, #4ecdc4 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .subtitle { font-size: 1.2rem; color: #a8a8a8; }
-    .inauguration-date {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      background: rgba(255,107,107,0.2);
-      border: 1px solid rgba(255,107,107,0.5);
-    }
+    h1 { font-size: 2.5rem; background: linear-gradient(135deg, #fff 0%, #ff6b6b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: #a8a8a8; margin-top: 0.5rem; }
     .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
-    }
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
     .metric-card {
-      background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
-      position: relative;
-      overflow: hidden;
+      background: #1e1e2e;
+      border-radius: 15px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: 0.3s;
     }
-    .metric-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-    }
-    .metric-title { font-size: 1.3rem; margin-bottom: 0.5rem; color: #4ecdc4; }
-    .metric-value {
-      font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-    .metric-value .positive { 
-        background: linear-gradient(135deg, #4ecdc4 0%, #a8e063 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    .metric-value .negative { 
-        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    .metric-change { font-size: 1.1rem; color: #a8a8a8; }
-    .charts-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-      gap: 2rem;
-    }
-    .chart-container {
-      background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    footer { text-align: center; padding: 2rem; color: #555; }
+    .metric-card:hover { border-color: #4ecdc4; }
+    .metric-title { font-size: 1rem; color: #a8a8a8; text-transform: uppercase; letter-spacing: 1px; }
+    .metric-value { font-size: 2.2rem; font-weight: 800; margin: 0.5rem 0; }
+    .metric-change { font-size: 0.9rem; }
+    .positive { color: #4ecdc4; }
+    .negative { color: #ff6b6b; }
+    .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; }
+    .chart-container { background: #1e1e2e; border-radius: 15px; padding: 1.5rem; height: 350px; }
+    footer { text-align: center; padding: 2rem; color: #555; font-size: 0.8rem; }
   </style>
 </head>
 <body>
 
   <header class="header">
     <h1>U.S. Economic Dashboard</h1>
-    <p class="subtitle">Trump Presidency (January 20, 2025 – Present)</p>
-    <div class="inauguration-date">Inauguration: Jan 20, 2025</div>
+    <p class="subtitle">Real-time Performance Metrics (2025 – Present)</p>
   </header>
 
   <main class="container">
-    <!-- Metric Cards -->
     <section class="metrics-grid">
-      <div class="metric-card">
-        <h2 class="metric-title">GDP Growth Rate</h2>
-        <p class="metric-value" id="gdp-value">Loading...</p>
-        <p class="metric-change" id="gdp-change"></p>
+      <div class="metric-card" id="card-gdp">
+        <h2 class="metric-title">GDP Growth (Q/Q)</h2>
+        <p class="metric-value" id="gdp-value">...</p>
+        <p class="metric-change" id="gdp-change">Loading latest quarterly data</p>
       </div>
-      <div class="metric-card">
+      <div class="metric-card" id="card-unemployment">
         <h2 class="metric-title">Unemployment Rate</h2>
-        <p class="metric-value" id="unemployment-value">Loading...</p>
-        <p class="metric-change" id="unemployment-change"></p>
+        <p class="metric-value" id="unemployment-value">...</p>
+        <p class="metric-change" id="unemployment-change">Loading BLS data</p>
       </div>
-      <div class="metric-card">
-        <h2 class="metric-title">Inflation Rate (CPI)</h2>
-        <p class="metric-value" id="inflation-value">Loading...</p>
-        <p class="metric-change" id="inflation-change"></p>
+      <div class="metric-card" id="card-inflation">
+        <h2 class="metric-title">Inflation (CPI Y/Y)</h2>
+        <p class="metric-value" id="inflation-value">...</p>
+        <p class="metric-change" id="inflation-change">Loading CPI data</p>
       </div>
-      <div class="metric-card">
-        <h2 class="metric-title">S&P 500</h2>
-        <p class="metric-value" id="sp500-value">Loading...</p>
-        <p class="metric-change" id="sp500-change"></p>
+      <div class="metric-card" id="card-sp500">
+        <h2 class="metric-title">S&P 500 Index</h2>
+        <p class="metric-value" id="sp500-value">...</p>
+        <p class="metric-change" id="sp500-change">Daily market close</p>
       </div>
     </section>
 
-    <!-- Charts -->
     <section class="charts-grid">
-      <div class="chart-container">
-        <canvas id="gdpChart"></canvas>
-      </div>
-      <div class="chart-container">
-        <canvas id="unemploymentChart"></canvas>
-      </div>
-      <div class="chart-container">
-        <canvas id="inflationChart"></canvas>
-      </div>
-      <div class="chart-container">
-        <canvas id="sp500Chart"></canvas>
-      </div>
+      <div class="chart-container"><canvas id="gdpChart"></canvas></div>
+      <div class="chart-container"><canvas id="unemploymentChart"></canvas></div>
+      <div class="chart-container"><canvas id="inflationChart"></canvas></div>
+      <div class="chart-container"><canvas id="sp500Chart"></canvas></div>
     </section>
   </main>
 
-  <footer id="footer">
-    <p>Last Updated: <span id="last-updated"></span></p>
-    <p>&copy; 2025 Economic Dashboard. Data from FRED, Federal Reserve Bank of St. Louis.</p>
+  <footer>
+    <p>Last Sync: <span id="last-updated">Never</span> | Source: St. Louis FED (FRED)</p>
   </footer>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      
-      let economicData = { gdp: [], gdpForChart: [], unemployment: [], inflation: [], sp500: [] };
-      let charts = {};
+    const FRED_API_KEY = 'd2c9f37eac3cdd75dd4147ef7726e8ff';
+    const PROXY_URL = 'https://corsproxy.io/?';
+    const START_DATE = '2024-01-01'; // Get baseline for growth calcs
+    const TERM_START = '2025-01-20';
 
-      // --- FETCH REAL ECONOMIC DATA ---
-      const fetchData = async () => {
-        // FRED API Key
-        const apiKey = 'd2c9f37eac3cdd75dd4147ef7726e8ff'; 
+    let charts = {};
 
-        document.getElementById('last-updated').textContent = 'Fetching data...';
-        
-        const proxyUrl = 'https://corsproxy.io/?';
-        const baseUrl = 'https://api.stlouisfed.org/fred/series/observations';
-        const startDate = '2024-01-01'; 
+    async function fetchFred(seriesId) {
+        const url = `${PROXY_URL}${encodeURIComponent(`https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_API_KEY}&file_type=json&observation_start=${START_DATE}`)}`;
+        const res = await fetch(url);
+        return res.json();
+    }
 
-        const series = {
-            gdp: 'A191RL1Q225SBEA', // Real GDP, Percent Change from Preceding Period, Quarterly
-            unemployment: 'UNRATE', // Civilian Unemployment Rate, Monthly
-            cpi: 'CPIAUCSL', // Consumer Price Index, Monthly
-            sp500: 'SP500' // S&P 500, Daily
-        };
-
-        const fetchPromises = Object.keys(series).map(key => {
-            const seriesId = series[key];
-            const fredUrl = `${baseUrl}?series_id=${seriesId}&api_key=${apiKey}&file_type=json&observation_start=${startDate}`;
-            const url = proxyUrl + encodeURIComponent(fredUrl);
-            return fetch(url).then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch ${seriesId}: ${response.statusText}`);
-                }
-                return response.json();
-            });
-        });
-
+    async function init() {
         try {
-            const [gdpRes, unemploymentRes, cpiRes, sp500Res] = await Promise.all(fetchPromises);
-            
-            const termStartDate = '2025-01-20';
-            
-            const allGdpData = gdpRes.observations.map(d => ({ date: d.date, value: parseFloat(d.value) }));
-            economicData.gdpForChart = allGdpData.filter(d => moment(d.date).isSameOrAfter('2024-10-01'));
-            economicData.gdp = allGdpData.filter(d => moment(d.date).isSameOrAfter(termStartDate));
+            const [gdpData, unrateData, cpiData, spData] = await Promise.all([
+                fetchFred('A191RL1Q225SBEA'),
+                fetchFred('UNRATE'),
+                fetchFred('CPIAUCSL'),
+                fetchFred('SP500')
+            ]);
 
-            economicData.unemployment = unemploymentRes.observations
-                .map(d => ({ date: d.date, value: parseFloat(d.value) }))
-                .filter(d => moment(d.date).isSameOrAfter(termStartDate));
-            
-            const cpiData = cpiRes.observations.map(d => ({ date: d.date, value: parseFloat(d.value) }));
-            economicData.inflation = cpiData.slice(12).map((d, i) => {
-                const prevYearValue = cpiData[i].value;
-                const inflationValue = ((d.value - prevYearValue) / prevYearValue) * 100;
-                return { date: d.date, value: inflationValue };
-            }).filter(d => moment(d.date).isSameOrAfter(termStartDate));
+            // Process Data
+            const process = (data) => data.observations
+                .filter(o => o.value !== '.')
+                .map(o => ({ x: o.date, y: parseFloat(o.value) }));
 
-            const sp500Monthly = {};
-            sp500Res.observations.forEach(d => {
-                if (d.value !== '.') {
-                    const month = d.date.substring(0, 7);
-                    sp500Monthly[month] = { date: d.date, value: parseFloat(d.value) };
-                }
+            const gdpPoints = process(gdpData);
+            const unratePoints = process(unrateData);
+            const rawCpi = process(cpiData);
+            const spPoints = process(spData);
+
+            // Calculate Inflation Rate (Y/Y % Change)
+            const inflationPoints = rawCpi.slice(12).map((d, i) => {
+                const prevYear = rawCpi[i].y;
+                return { x: d.x, y: ((d.y - prevYear) / prevYear) * 100 };
             });
-            economicData.sp500 = Object.values(sp500Monthly)
-                .filter(d => moment(d.date).isSameOrAfter(termStartDate));
 
-            updateMetricCards();
-            createCharts();
+            // Update UI
+            updateCard('gdp', gdpPoints, true, true);
+            updateCard('unemployment', unratePoints, true, false);
+            updateCard('inflation', inflationPoints, true, false);
+            updateCard('sp500', spPoints, false, true);
 
-        } catch (error) {
-            console.error("Failed to fetch economic data:", error);
-            document.getElementById('gdp-value').textContent = 'Error';
-            document.getElementById('unemployment-value').textContent = 'Error';
-            document.getElementById('inflation-value').textContent = 'Error';
-            document.getElementById('sp500-value').textContent = 'Error';
+            // Render Charts
+            renderChart('gdpChart', gdpPoints, 'GDP Growth %', '#4ecdc4');
+            renderChart('unemploymentChart', unratePoints, 'Unemployment %', '#ff6b6b');
+            renderChart('inflationChart', inflationPoints, 'Inflation %', '#ffc107');
+            renderChart('sp500Chart', spPoints, 'S&P 500', '#007bff');
+
+            document.getElementById('last-updated').textContent = moment().format('LLL');
+
+        } catch (err) {
+            console.error("Dashboard Error:", err);
         }
-      };
-      
-      // --- UPDATE METRIC CARDS ---
-      const updateMetricCards = () => {
-        // Standard display function for most cards
-        const displayValue = (elementId, dataArray, isPercent, higherIsBetter) => {
-            const changeValueEl = document.getElementById(`${elementId}-value`);
-            const absoluteValueEl = document.getElementById(`${elementId}-change`);
+    }
 
-            if (!dataArray || dataArray.length === 0) {
-                changeValueEl.textContent = 'Pending';
-                absoluteValueEl.innerHTML = 'Waiting for 2025 data...';
-                return;
-            }
+    function updateCard(id, data, isPercent, higherIsBetter) {
+        const current = data[data.length - 1].y;
+        const startVal = data.find(d => moment(d.x).isSameOrAfter(TERM_START))?.y || data[0].y;
+        const diff = current - startVal;
+        
+        const valEl = document.getElementById(`${id}-value`);
+        const changeEl = document.getElementById(`${id}-change`);
 
-            const start = dataArray[0].value;
-            const current = dataArray[dataArray.length - 1].value;
-            
-            const change = current - start;
-            const pctChange = (start !== 0) ? (change / Math.abs(start)) * 100 : 0;
-            let symbol = pctChange >= 0 ? '▲' : '▼';
-            let cssClass = higherIsBetter ? (pctChange >= 0 ? 'positive' : 'negative') : (pctChange < 0 ? 'positive' : 'negative');
+        valEl.textContent = isPercent ? `${current.toFixed(1)}%` : Math.round(current).toLocaleString();
+        
+        const isPositive = diff >= 0;
+        const colorClass = (isPositive === higherIsBetter) ? 'positive' : 'negative';
+        const symbol = isPositive ? '▲' : '▼';
+        
+        changeEl.innerHTML = `<span class="${colorClass}">${symbol} ${Math.abs(diff).toFixed(2)}${isPercent ? '%' : ''}</span> since Jan 2025`;
+    }
 
-            changeValueEl.innerHTML = `<span class="${cssClass}">${symbol} ${pctChange.toFixed(2)}%</span>`;
-            
-            const currentFormatted = isPercent ? `${current.toFixed(1)}%` : current.toLocaleString(undefined, {maximumFractionDigits: 0});
-            absoluteValueEl.textContent = `Since Trump took office. Current: ${currentFormatted}`;
-        };
-
-        // Special handling for GDP card
-        const displayGdpValue = () => {
-            const changeValueEl = document.getElementById('gdp-value');
-            const absoluteValueEl = document.getElementById('gdp-change');
-            const dataForChart = economicData.gdpForChart;
-            const dataForCalc = economicData.gdp;
-
-            // Set the absolute value text first
-            if (dataForChart && dataForChart.length > 0) {
-                const current = dataForChart[dataForChart.length - 1].value;
-                absoluteValueEl.textContent = `Most Recent: ${current.toFixed(1)}%`;
-            } else {
-                absoluteValueEl.textContent = 'No Data';
-            }
-
-            // Set the change value text
-            if (dataForCalc && dataForCalc.length > 0) {
-                const start = dataForCalc[0].value;
-                const current = dataForCalc[dataForCalc.length - 1].value;
-                const change = current - start;
-                const pctChange = (start !== 0) ? (change / Math.abs(start)) * 100 : 0;
-                let symbol = pctChange >= 0 ? '▲' : '▼';
-                let cssClass = pctChange >= 0 ? 'positive' : 'negative';
-                
-                changeValueEl.innerHTML = `<span class="${cssClass}">${symbol} ${pctChange.toFixed(2)}%</span>`;
-                absoluteValueEl.textContent = `Since Trump took office. Current: ${current.toFixed(1)}%`;
-            } else {
-                changeValueEl.textContent = 'Pending';
-                // The absolute text is already set to "Most Recent", which is correct in this case.
-            }
-        };
-
-        displayGdpValue();
-        displayValue('unemployment', economicData.unemployment, true, false);
-        displayValue('inflation', economicData.inflation, true, false);
-        displayValue('sp500', economicData.sp500, false, true);
-
-        document.getElementById('last-updated').textContent = new Date().toLocaleString();
-      };
-
-      // --- CREATE CHARTS ---
-      const createCharts = () => {
-        const chartOptions = (title, color) => ({
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { intersect: false, mode: 'index' },
-          plugins: {
-            legend: { display: false },
-            title: { display: true, text: title, color: '#fff', font: { size: 18 } },
-            tooltip: {
-              enabled: true,
-              backgroundColor: 'rgba(10, 10, 10, 0.85)',
-              titleFont: { size: 16, weight: 'bold' },
-              titleColor: '#ffffff',
-              bodyFont: { size: 14 },
-              bodyColor: '#dddddd',
-              padding: 12,
-              cornerRadius: 8,
-              borderColor: color,
-              borderWidth: 1,
-              displayColors: false,
-              caretSize: 8,
-              callbacks: {
-                title: function(tooltipItems) { return moment(tooltipItems[0].parsed.x).format('MMMM YYYY'); },
-                label: function(context) {
-                    let label = context.dataset.label || '';
-                    if (label) { label += ': '; }
-                    if (context.parsed.y !== null) {
-                        if (context.dataset.label === 'S&P 500') {
-                             label += context.parsed.y.toLocaleString(undefined, {maximumFractionDigits: 0});
-                        } else {
-                             label += context.parsed.y.toFixed(2) + '%';
-                        }
-                    }
-                    return " " + label;
+    function renderChart(canvasId, data, label, color) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: label,
+                    data: data,
+                    borderColor: color,
+                    backgroundColor: color + '22',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { type: 'time', time: { unit: 'month' }, grid: { color: '#333' } },
+                    y: { grid: { color: '#333' } }
                 }
-              }
             }
-          },
-          scales: {
-            x: { type: 'time', time: { unit: 'month' }, ticks: { color: '#a8a8a8' }, grid: { color: 'rgba(255,255,255,0.1)' } },
-            y: { ticks: { color: '#a8a8a8' }, grid: { color: 'rgba(255,255,255,0.1)' } }
-          },
-          animation: { duration: 800, easing: 'easeInOutQuart' }
         });
-        
-        const chartDataSet = (data, label, color) => [{
-            label: label,
-            data: data,
-            borderColor: color,
-            backgroundColor: `${color}33`,
-            fill: true,
-            tension: 0.4,
-            pointRadius: 4,
-            pointHoverRadius: 7,
-            pointBackgroundColor: color,
-            pointHoverBackgroundColor: '#fff',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 2,
-        }];
+    }
 
-        const createOrUpdateChart = (chartId, data, label, color, title) => {
-            const ctx = document.getElementById(chartId).getContext('2d');
-            if (charts[chartId]) {
-                charts[chartId].data.datasets[0].data = data;
-                charts[chartId].update();
-            } else {
-                charts[chartId] = new Chart(ctx, {
-                    type: 'line',
-                    data: { datasets: chartDataSet(data, label, color) },
-                    options: chartOptions(title, color)
-                });
-            }
-        };
-        
-        createOrUpdateChart('gdpChart', economicData.gdpForChart.map(d => ({x: d.date, y: d.value})), 'GDP Growth', '#4ecdc4', 'GDP Growth Rate (%)');
-        createOrUpdateChart('unemploymentChart', economicData.unemployment.map(d => ({x: d.date, y: d.value})), 'Unemployment Rate', '#ff6b6b', 'Unemployment Rate (%)');
-        createOrUpdateChart('inflationChart', economicData.inflation.map(d => ({x: d.date, y: d.value})), 'Inflation Rate', '#ffc107', 'Inflation Rate (CPI %)');
-        createOrUpdateChart('sp500Chart', economicData.sp500.map(d => ({x: d.date, y: d.value})), 'S&P 500', '#007bff', 'S&P 500 Index');
-      };
-
-      // --- INITIALIZE DASHBOARD ---
-      fetchData();
-    });
+    init();
   </script>
-
 </body>
 </html>
