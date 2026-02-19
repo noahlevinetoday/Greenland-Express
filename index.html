@@ -26,53 +26,63 @@
     h1 { font-size: 2.5rem; background: linear-gradient(135deg, #fff 0%, #ff6b6b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .subtitle { color: #a8a8a8; margin-top: 0.5rem; }
     .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+    
+    /* Metrics Grid */
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
     .metric-card {
-      background: #1e1e2e;
+      background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
       border-radius: 15px;
       padding: 1.5rem;
-      border: 1px solid rgba(255,255,255,0.05);
-      transition: 0.3s;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
-    .metric-card:hover { border-color: #4ecdc4; }
-    .metric-title { font-size: 1rem; color: #a8a8a8; text-transform: uppercase; letter-spacing: 1px; }
-    .metric-value { font-size: 2.2rem; font-weight: 800; margin: 0.5rem 0; }
-    .metric-change { font-size: 0.9rem; }
+    .metric-title { font-size: 1.1rem; color: #4ecdc4; font-weight: 600; margin-bottom: 0.5rem; }
+    .metric-value { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.2rem; }
+    .metric-change { font-size: 0.95rem; color: #a8a8a8; }
+    
     .positive { color: #4ecdc4; }
     .negative { color: #ff6b6b; }
-    .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; }
-    .chart-container { background: #1e1e2e; border-radius: 15px; padding: 1.5rem; height: 350px; }
-    footer { text-align: center; padding: 2rem; color: #555; font-size: 0.8rem; }
+
+    /* Charts Grid */
+    .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 2rem; }
+    .chart-container { 
+      background: #1e1e2e; 
+      border-radius: 20px; 
+      padding: 1.5rem; 
+      border: 1px solid rgba(255,255,255,0.05);
+      height: 400px;
+    }
+    footer { text-align: center; padding: 3rem; color: #666; font-size: 0.9rem; border-top: 1px solid #222; margin-top: 2rem; }
   </style>
 </head>
 <body>
 
   <header class="header">
     <h1>U.S. Economic Dashboard</h1>
-    <p class="subtitle">Real-time Performance Metrics (2025 – Present)</p>
+    <p class="subtitle">Trump Presidency Performance (Jan 20, 2025 – Present)</p>
   </header>
 
   <main class="container">
     <section class="metrics-grid">
-      <div class="metric-card" id="card-gdp">
-        <h2 class="metric-title">GDP Growth (Q/Q)</h2>
+      <div class="metric-card">
+        <h2 class="metric-title">Real GDP Growth</h2>
         <p class="metric-value" id="gdp-value">...</p>
-        <p class="metric-change" id="gdp-change">Loading latest quarterly data</p>
+        <p class="metric-change" id="gdp-change">Loading Q1 2026 Forecasts...</p>
       </div>
-      <div class="metric-card" id="card-unemployment">
+      <div class="metric-card">
         <h2 class="metric-title">Unemployment Rate</h2>
         <p class="metric-value" id="unemployment-value">...</p>
-        <p class="metric-change" id="unemployment-change">Loading BLS data</p>
+        <p class="metric-change" id="unemployment-change">Loading Feb 2026 Data...</p>
       </div>
-      <div class="metric-card" id="card-inflation">
+      <div class="metric-card">
         <h2 class="metric-title">Inflation (CPI Y/Y)</h2>
         <p class="metric-value" id="inflation-value">...</p>
-        <p class="metric-change" id="inflation-change">Loading CPI data</p>
+        <p class="metric-change" id="inflation-change">Loading CPI data...</p>
       </div>
-      <div class="metric-card" id="card-sp500">
-        <h2 class="metric-title">S&P 500 Index</h2>
+      <div class="metric-card">
+        <h2 class="metric-title">S&P 500 Performance</h2>
         <p class="metric-value" id="sp500-value">...</p>
-        <p class="metric-change" id="sp500-change">Daily market close</p>
+        <p class="metric-change" id="sp500-change">Calculating market shift...</p>
       </div>
     </section>
 
@@ -85,19 +95,17 @@
   </main>
 
   <footer>
-    <p>Last Sync: <span id="last-updated">Never</span> | Source: St. Louis FED (FRED)</p>
+    <p>Last Updated: <span id="last-updated">Updating...</span></p>
+    <p>Data Source: Federal Reserve Economic Data (FRED). All values reflect real-time 2025-2026 observations.</p>
   </footer>
 
   <script>
     const FRED_API_KEY = 'd2c9f37eac3cdd75dd4147ef7726e8ff';
     const PROXY_URL = 'https://corsproxy.io/?';
-    const START_DATE = '2024-01-01'; // Get baseline for growth calcs
     const TERM_START = '2025-01-20';
 
-    let charts = {};
-
     async function fetchFred(seriesId) {
-        const url = `${PROXY_URL}${encodeURIComponent(`https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_API_KEY}&file_type=json&observation_start=${START_DATE}`)}`;
+        const url = `${PROXY_URL}${encodeURIComponent(`https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_API_KEY}&file_type=json&observation_start=2024-01-01`)}`;
         const res = await fetch(url);
         return res.json();
     }
@@ -111,7 +119,6 @@
                 fetchFred('SP500')
             ]);
 
-            // Process Data
             const process = (data) => data.observations
                 .filter(o => o.value !== '.')
                 .map(o => ({ x: o.date, y: parseFloat(o.value) }));
@@ -121,69 +128,87 @@
             const rawCpi = process(cpiData);
             const spPoints = process(spData);
 
-            // Calculate Inflation Rate (Y/Y % Change)
-            const inflationPoints = rawCpi.slice(12).map((d, i) => {
-                const prevYear = rawCpi[i].y;
-                return { x: d.x, y: ((d.y - prevYear) / prevYear) * 100 };
-            });
+            // Calculate Inflation Rate
+            const inflationPoints = rawCpi.slice(12).map((d, i) => ({
+                x: d.x, 
+                y: ((d.y - rawCpi[i].y) / rawCpi[i].y) * 100 
+            }));
 
-            // Update UI
-            updateCard('gdp', gdpPoints, true, true);
-            updateCard('unemployment', unratePoints, true, false);
-            updateCard('inflation', inflationPoints, true, false);
-            updateCard('sp500', spPoints, false, true);
+            // Filter for Term (2025-2026)
+            const termFilter = (pts) => pts.filter(p => moment(p.x).isSameOrAfter(TERM_START));
 
-            // Render Charts
-            renderChart('gdpChart', gdpPoints, 'GDP Growth %', '#4ecdc4');
-            renderChart('unemploymentChart', unratePoints, 'Unemployment %', '#ff6b6b');
-            renderChart('inflationChart', inflationPoints, 'Inflation %', '#ffc107');
-            renderChart('sp500Chart', spPoints, 'S&P 500', '#007bff');
+            // Update Cards
+            updateMetric('gdp', termFilter(gdpPoints), true, true);
+            updateMetric('unemployment', termFilter(unratePoints), true, false);
+            updateMetric('inflation', termFilter(inflationPoints), true, false);
+            updateMetric('sp500', termFilter(spPoints), false, true);
 
-            document.getElementById('last-updated').textContent = moment().format('LLL');
+            // Render Detailed Charts
+            renderChart('gdpChart', gdpPoints, 'GDP Growth Rate (%)', '#4ecdc4', 'Percent');
+            renderChart('unemploymentChart', unratePoints, 'Unemployment Rate (%)', '#ff6b6b', 'Percent');
+            renderChart('inflationChart', inflationPoints, 'Inflation Rate (Y/Y % Change)', '#ffc107', 'Percent');
+            renderChart('sp500Chart', spPoints, 'S&P 500 Index Value', '#007bff', 'Index Points');
+
+            document.getElementById('last-updated').textContent = moment().format('MMMM Do YYYY, h:mm a');
 
         } catch (err) {
-            console.error("Dashboard Error:", err);
+            console.error("Dashboard Sync Error:", err);
         }
     }
 
-    function updateCard(id, data, isPercent, higherIsBetter) {
+    function updateMetric(id, data, isPercent, higherIsBetter) {
+        if (data.length === 0) return;
         const current = data[data.length - 1].y;
-        const startVal = data.find(d => moment(d.x).isSameOrAfter(TERM_START))?.y || data[0].y;
-        const diff = current - startVal;
+        const start = data[0].y;
+        const diff = current - start;
         
         const valEl = document.getElementById(`${id}-value`);
         const changeEl = document.getElementById(`${id}-change`);
 
         valEl.textContent = isPercent ? `${current.toFixed(1)}%` : Math.round(current).toLocaleString();
         
-        const isPositive = diff >= 0;
-        const colorClass = (isPositive === higherIsBetter) ? 'positive' : 'negative';
-        const symbol = isPositive ? '▲' : '▼';
+        const isImproved = (diff >= 0) === higherIsBetter;
+        const colorClass = isImproved ? 'positive' : 'negative';
+        const symbol = diff >= 0 ? '▲' : '▼';
         
-        changeEl.innerHTML = `<span class="${colorClass}">${symbol} ${Math.abs(diff).toFixed(2)}${isPercent ? '%' : ''}</span> since Jan 2025`;
+        changeEl.innerHTML = `<span class="${colorClass}">${symbol} ${Math.abs(diff).toFixed(2)}${isPercent ? '%' : ''}</span> since Inauguration`;
     }
 
-    function renderChart(canvasId, data, label, color) {
+    function renderChart(canvasId, data, title, color, yLabel) {
         const ctx = document.getElementById(canvasId).getContext('2d');
         new Chart(ctx, {
             type: 'line',
             data: {
                 datasets: [{
-                    label: label,
+                    label: title,
                     data: data,
                     borderColor: color,
                     backgroundColor: color + '22',
+                    borderWidth: 3,
                     fill: true,
+                    pointRadius: 2,
                     tension: 0.3
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
+                plugins: {
+                    title: { display: true, text: title, color: '#fff', font: { size: 16 } },
+                    legend: { display: false }
+                },
                 scales: {
-                    x: { type: 'time', time: { unit: 'month' }, grid: { color: '#333' } },
-                    y: { grid: { color: '#333' } }
+                    x: { 
+                        type: 'time', 
+                        time: { unit: 'month' }, 
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#888' }
+                    },
+                    y: { 
+                        title: { display: true, text: yLabel, color: '#888' },
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#888' }
+                    }
                 }
             }
         });
