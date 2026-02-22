@@ -1,0 +1,243 @@
+/* ============================================================
+   U.S. Economic Dashboard - Stylesheet
+   ============================================================ */
+
+/* ----- Design Tokens / Custom Properties ----- */
+:root {
+  /* Colors */
+  --color-bg:            #0a0a0a;
+  --color-surface:       #1e1e2e;
+  --color-surface-alt:   #2d2d44;
+  --color-header-start:  #1a1a2e;
+  --color-header-end:    #16213e;
+  --color-text:          #ffffff;
+  --color-text-muted:    #a8a8a8;
+  --color-text-dim:      #888888;
+  --color-text-footer:   #666666;
+  --color-border:        rgba(255, 255, 255, 0.10);
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+  --color-divider:       #222222;
+
+  /* Accent palette */
+  --color-positive:  #4ecdc4;
+  --color-negative:  #ff6b6b;
+  --color-accent-1:  #4ecdc4;   /* teal   - GDP          */
+  --color-accent-2:  #ff6b6b;   /* coral  - unemployment  */
+  --color-accent-3:  #ffc107;   /* amber  - inflation     */
+  --color-accent-4:  #007bff;   /* blue   - S&P 500       */
+
+  /* Typography */
+  --font-stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Spacing */
+  --space-xs:  0.25rem;
+  --space-sm:  0.5rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2rem;
+  --space-2xl: 3rem;
+
+  /* Border Radius */
+  --radius-md: 15px;
+  --radius-lg: 20px;
+
+  /* Layout */
+  --max-width: 1400px;
+}
+
+
+/* ----- Reset ----- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+/* ----- Base ----- */
+body {
+  font-family: var(--font-stack);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+
+/* ----- Header ----- */
+.header {
+  background: linear-gradient(135deg, var(--color-header-start) 0%, var(--color-header-end) 100%);
+  padding: var(--space-2xl) 0;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header__title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff 0%, var(--color-negative) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header__subtitle {
+  color: var(--color-text-muted);
+  margin-top: var(--space-sm);
+  font-size: clamp(0.85rem, 2vw, 1rem);
+}
+
+
+/* ----- Container ----- */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-xl);
+}
+
+
+/* ----- Metrics Grid ----- */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+}
+
+.metric-card {
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-alt) 100%);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.metric-card__title {
+  font-size: 1.1rem;
+  color: var(--color-accent-1);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
+
+.metric-card__value {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  margin-bottom: var(--space-xs);
+}
+
+.metric-card__change {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+
+/* ----- Positive / Negative Indicators ----- */
+.positive { color: var(--color-positive); }
+.negative { color: var(--color-negative); }
+
+
+/* ----- Error State ----- */
+.error-banner {
+  background: rgba(255, 107, 107, 0.15);
+  border: 1px solid var(--color-negative);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  text-align: center;
+  color: var(--color-negative);
+  display: none;
+}
+
+.error-banner.visible {
+  display: block;
+}
+
+
+/* ----- Charts Grid ----- */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
+  gap: var(--space-xl);
+}
+
+.chart-container {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border-subtle);
+  height: 400px;
+  position: relative;
+}
+
+
+/* ----- Footer ----- */
+.footer {
+  text-align: center;
+  padding: var(--space-2xl);
+  color: var(--color-text-footer);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--color-divider);
+  margin-top: var(--space-xl);
+}
+
+.footer p + p {
+  margin-top: var(--space-sm);
+}
+
+
+/* ----- Responsive ----- */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-md);
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-container {
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: var(--space-lg) 0;
+  }
+
+  .chart-container {
+    height: 250px;
+  }
+}
+
+
+/* ----- Loading Skeleton ----- */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.metric-card__value--loading {
+  background: linear-gradient(90deg,
+    var(--color-surface-alt) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    var(--color-surface-alt) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 4px;
+  color: transparent;
+  user-select: none;
+}
